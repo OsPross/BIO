@@ -1,0 +1,138 @@
+#background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: linear-gradient(to bottom, #2e0854, #000000); 
+    transition: background 0.3s ease-in-out;
+    overflow: hidden; 
+  }
+  
+  
+  .star {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0;
+    animation: twinkle 2s infinite, fall 5s linear infinite; 
+    transition: transform 0.1s ease;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5); 
+  }
+  
+  .star::before {
+    content: "";
+    display: block;
+    width: 2px;
+    height: 2px;
+    background-color: #fff;
+    border-radius: 50%;
+  }
+  
+  @keyframes twinkle {
+    0% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0; 
+    }
+  }
+  
+  @keyframes fall {
+    0% {
+      transform: translateY(-10%); 
+    }
+    100% {
+      transform: translateY(110%);
+    }
+  }
+  #datetime {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    font-size: 14px;
+    color: #5e5b5b;
+    z-index: 10;
+    font-family: "Roboto Mono", monospace; 
+  }
+  
+  .wroc a {
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+  }
+
+body {
+    font-family: sans-serif;
+    background-color: #111;
+    color: #eee;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Stars_in_the_Milky_Way.jpg/1280px-Stars_in_the_Milky_Way.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.container {
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 50px;
+    text-align: center;
+}
+
+.dice-container { /* Kontener na rzuty gracza i bota */
+    display: flex;
+    justify-content: space-around; /* Równomierne rozmieszczenie */
+    width: 300px; /* Ustalona szerokość */
+    margin-bottom: 20px;
+}
+
+.dice-box { /* Pudełko z opisem i kością */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.dice {
+    font-size: 4em;
+    margin: 10px;
+    color: #af60ff;
+    text-shadow: 2px 2px 4px #000000;
+}
+
+button {
+    background-color: #af60ff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    box-shadow: 2px 2px 4px #000000;
+}
+
+button:hover {
+    background-color: #8000ff;
+}
+
+#result {
+    font-weight: bold;
+    margin-top: 20px;
+    color: #00ffff;
+    text-shadow: 1px 1px 2px #000000;
+}
+
+h1 {
+    color: #00ffff;
+    text-shadow: 2px 2px 4px #000000;
+}
+.label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #00ffff;
+}
