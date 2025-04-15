@@ -309,6 +309,33 @@ body.fade-in {
   background-color: #c0392b;
 }
 
+.pan a {
+  text-decoration: none;
+  color: rgb(0, 0, 0);
+}
+
+.pan {
+  position: fixed;
+  top: 10px;
+  right: 150px;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.pan:hover {
+  background-color: #e84141;
+}
+
+.pan:active {
+  background-color: #c0392b;
+}
+
 form {
   background-color: rgba(255, 255, 255, 0.1); 
   padding: 30px;

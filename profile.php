@@ -26,7 +26,11 @@ $user_data = getUserData($_SESSION['user_id']);
   
   <div id="background"></div>
   <div id="datetime"></div>
+  <?php if ($_SESSION['is_admin'] ?? false): ?>
+    <button class="pan"><a href="admin_panel.php">Panel Admina</a></button>
+<?php endif; ?>
   <button class="wyl"><a href="assets/php/login.php?logout=true">Wyloguj się</a></button>
+
   <button class="rule"><a href="ruleta.php">Kostki</a></button>
   <div id="content-wrapper">
     <div id="main-box">
