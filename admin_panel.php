@@ -155,7 +155,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div id="watermark">coded by OsPros | 2025</div>
     
     <script src="assets/js/stars.js"></script>
-    <script src="/assets/js/datetime.js"></script>
+    <script src="assets/js/datetime.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             document.body.classList.add('fade-in');

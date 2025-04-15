@@ -7,14 +7,13 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     exit();
 }
 
-// Obsługa formularzy
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Linki społecznościowe
+    // Dodanie linku społecznościowego
     if (isset($_POST['add_link'])) {
         $platform = trim($_POST['platform']);
         $link = trim($_POST['link']);
-
         $allowed_platforms = ['facebook', 'twitter', 'instagram', 'github', 'discord', 'youtube'];
+
         if (!in_array(strtolower($platform), $allowed_platforms)) {
             $_SESSION['error'] = 'Niepoprawna platforma.';
             header('Location: add_social_link.php');
@@ -38,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-    // Opis profilu
+    // Aktualizacja opisu profilu
     if (isset($_POST['update_description'])) {
         $profile_description = trim($_POST['profile_description']);
 
@@ -57,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-    // Zdjęcie profilowe
+    // Przesyłanie zdjęcia profilowego
     if (isset($_POST['upload_image']) && isset($_FILES['profile_image'])) {
         $target_dir = "../pfp/";
         $imageFileType = strtolower(pathinfo($_FILES["profile_image"]["name"], PATHINFO_EXTENSION));
@@ -69,10 +68,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit();
         }
 
+        // Pobierz stare zdjęcie użytkownika
+        $stmt = $pdo->prepare("SELECT profile_image FROM users WHERE id = :user_id");
+        $stmt->bindParam(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
+        $stmt->execute();
+        $old_image = $stmt->fetchColumn();
+
         $new_filename = uniqid('img_', true) . '.' . $imageFileType;
         $target_file = $target_dir . $new_filename;
 
         if (move_uploaded_file($_FILES["profile_image"]["tmp_name"], $target_file)) {
+            // Usuń stare zdjęcie (jeśli nie domyślne)
+            if ($old_image && $old_image !== 'profile-picture.png' && file_exists($target_dir . $old_image)) {
+                unlink($target_dir . $old_image);
+            }
+
             $stmt = $pdo->prepare("UPDATE users SET profile_image = :profile_image WHERE id = :user_id");
             $stmt->bindParam(':profile_image', $new_filename, PDO::PARAM_STR);
             $stmt->bindParam(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
@@ -87,75 +97,73 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-        // Muzyka/efekty dźwiękowe
-        if (isset($_POST['upload_music']) && isset($_FILES['track_name'])) {
-            $target_dir = "../voice_effects/";
-            
-            // Sprawdź czy katalog istnieje
-            if (!file_exists($target_dir)) {
-                mkdir($target_dir, 0755, true);
-            }
-            
-            $original_filename = $_FILES["track_name"]["name"];
-            $audioFileType = strtolower(pathinfo($original_filename, PATHINFO_EXTENSION));
-            $allowed_types = ['mp3', 'wav', 'ogg', 'm4a'];
-            $allowed_mime_types = ['audio/mpeg', 'audio/wav', 'audio/ogg', 'audio/x-m4a'];
-    
-            // Sprawdź rozszerzenie pliku
-            if (!in_array($audioFileType, $allowed_types)) {
-                $_SESSION['error'] = 'Dozwolone formaty to MP3, WAV, OGG, M4A.';
-                header('Location: add_social_link.php');
-                exit();
-            }
-    
-            // Sprawdź rzeczywisty typ MIME
-            $finfo = finfo_open(FILEINFO_MIME_TYPE);
-            $mime_type = finfo_file($finfo, $_FILES["track_name"]["tmp_name"]);
-            finfo_close($finfo);
-    
-            if (!in_array($mime_type, $allowed_mime_types)) {
-                $_SESSION['error'] = 'Nieprawidłowy typ pliku audio.';
-                header('Location: add_social_link.php');
-                exit();
-            }
-    
-            // Maksymalny rozmiar 20MB
-            $max_size = 20 * 1024 * 1024;
-            if ($_FILES["track_name"]["size"] > $max_size) {
-                $_SESSION['error'] = 'Plik jest zbyt duży. Maksymalny rozmiar to 20MB.';
-                header('Location: add_social_link.php');
-                exit();
-            }
-    
-            // Usuń niebezpieczne znaki z nazwy pliku
-            $safe_filename = preg_replace("/[^a-zA-Z0-9._-]/", "_", pathinfo($original_filename, PATHINFO_FILENAME));
-            $new_filename = $safe_filename . '.' . $audioFileType;
-            $target_file = $target_dir . $new_filename;
-    
-            // Sprawdź czy plik o takiej nazwie już istnieje
-            $counter = 1;
-            while (file_exists($target_file)) {
-                $new_filename = $safe_filename . '_' . $counter . '.' . $audioFileType;
-                $target_file = $target_dir . $new_filename;
-                $counter++;
-            }
-    
+    // Przesyłanie lub przypisanie pliku audio
+    if (isset($_POST['upload_music']) && isset($_FILES['track_name'])) {
+        $target_dir = "../voice_effects/";
+
+        if (!file_exists($target_dir)) {
+            mkdir($target_dir, 0755, true);
+        }
+
+        $original_filename = $_FILES["track_name"]["name"];
+        $audioFileType = strtolower(pathinfo($original_filename, PATHINFO_EXTENSION));
+        $allowed_types = ['mp3', 'wav', 'ogg', 'm4a'];
+        $allowed_mime_types = ['audio/mpeg', 'audio/wav', 'audio/ogg', 'audio/x-m4a'];
+
+        if (!in_array($audioFileType, $allowed_types)) {
+            $_SESSION['error'] = 'Dozwolone formaty to MP3, WAV, OGG, M4A.';
+            header('Location: add_social_link.php');
+            exit();
+        }
+
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mime_type = finfo_file($finfo, $_FILES["track_name"]["tmp_name"]);
+        finfo_close($finfo);
+
+        if (!in_array($mime_type, $allowed_mime_types)) {
+            $_SESSION['error'] = 'Nieprawidłowy typ pliku audio.';
+            header('Location: add_social_link.php');
+            exit();
+        }
+
+        $max_size = 20 * 1024 * 1024;
+        if ($_FILES["track_name"]["size"] > $max_size) {
+            $_SESSION['error'] = 'Plik jest zbyt duży. Maksymalny rozmiar to 20MB.';
+            header('Location: add_social_link.php');
+            exit();
+        }
+
+        $safe_filename = preg_replace("/[^a-zA-Z0-9._-]/", "_", pathinfo($original_filename, PATHINFO_FILENAME));
+        $new_filename = $safe_filename . '.' . $audioFileType;
+        $target_file = $target_dir . $new_filename;
+
+        if (file_exists($target_file)) {
+            // Plik już istnieje — przypisz bez ponownego wrzucania
+            $stmt = $pdo->prepare("UPDATE users SET track_name = :track_name WHERE id = :user_id");
+            $stmt->bindParam(':track_name', $new_filename, PDO::PARAM_STR);
+            $stmt->bindParam(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
+            $stmt->execute();
+
+            $_SESSION['success'] = 'Plik "' . htmlspecialchars($original_filename) . '" już istnieje – przypisano do twojego konta.';
+        } else {
             if (move_uploaded_file($_FILES["track_name"]["tmp_name"], $target_file)) {
                 $stmt = $pdo->prepare("UPDATE users SET track_name = :track_name WHERE id = :user_id");
                 $stmt->bindParam(':track_name', $new_filename, PDO::PARAM_STR);
                 $stmt->bindParam(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
                 $stmt->execute();
-    
-                $_SESSION['success'] = 'Plik audio "'.htmlspecialchars($original_filename).'" został przesłany.';
+
+                $_SESSION['success'] = 'Plik audio "' . htmlspecialchars($original_filename) . '" został przesłany.';
             } else {
                 $_SESSION['error'] = 'Wystąpił błąd podczas przesyłania pliku audio.';
             }
-    
-            header('Location: add_social_link.php');
-            exit();
         }
+
+        header('Location: add_social_link.php');
+        exit();
+    }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="pl">

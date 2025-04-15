@@ -65,6 +65,36 @@ body {
   }
 }
 
+.search-bar-right {
+  position: absolute;
+  top: 60px;
+  right: 10px; /* dostosuj w razie potrzeby */
+  z-index: 10;
+  width: 20vw;
+  min-width: 100px;
+  max-width: 230px;
+  height: 20px;
+}
+
+.search-bar-right input[type="text"] {
+  width: 90%;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  font-size: 14px;
+  outline: none;
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+  transition: box-shadow 0.2s ease;
+}
+
+.search-bar-right input[type="text"]:focus {
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+}
+
+
+
 #main-box {
   text-align: center;
   padding: 30px;

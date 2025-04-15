@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['is_admin'] = $user['is_admin'];
 
             if ($user['is_admin']) {
-                header("Location: ../../admin_panel.php");
+                header("Location: ../../profile.php");
             } else {
                 header("Location: ../../profile.php");
             }

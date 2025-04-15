@@ -1,26 +1,37 @@
-/* ADMIN PANEL STYLES - PERFEKCYJNE DOPASOWANIE */
+/* ADMIN PANEL STYLES - DOPASOWANE DO GŁÓWNEGO STYLU */
 
-/* Główne kontenery */
-.admin-container {
+body {
   font-family: "Roboto Mono", monospace;
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  background: #000000;
   color: #fff;
   overflow: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
-  flex-direction: column;
 }
 
-.admin-container.fade-in {
+body.fade-in {
   opacity: 1;
 }
 
-.admin-main-box {
+#background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: linear-gradient(to bottom, #2e0854, #000000);
+  transition: background 0.3s ease-in-out;
+  overflow: hidden;
+}
+
+#main-box {
   text-align: center;
   padding: 30px;
   border-radius: 15px;
@@ -38,219 +49,269 @@
   overflow-y: auto;
 }
 
-.admin-main-box:hover {
+#main-box:hover {
   transform: scale(1.02);
 }
 
-/* Nagłówek */
-.admin-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid rgba(159, 82, 255, 0.3);
-}
-
-.admin-header h1 {
-  font-size: 2rem;
+.profile-nick {
+  font-size: 2.5rem;
   color: #fff;
   font-weight: 600;
-  margin: 0;
+  margin-bottom: 20px;
 }
 
-.admin-header h1 i {
+.profile-nick i {
   color: #9f52ff;
   margin-right: 10px;
 }
 
-/* Przyciski admina */
-.admin-btn {
-  background-color: #9f52ff;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  font-size: 16px;
-  font-weight: bold;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-  font-family: "Roboto Mono", monospace;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
+.star {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0;
+  animation: twinkle 2s infinite, fall 5s linear infinite; 
+  transition: transform 0.1s ease;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5); 
 }
 
-.admin-btn:hover {
-  background-color: #805ad5;
-  transform: scale(1.05);
-}
-
-.admin-btn.delete {
-  background-color: rgba(231, 76, 60, 0.7);
-}
-
-.admin-btn.delete:hover {
-  background-color: rgba(231, 76, 60, 0.9);
-}
-
-.admin-btn.edit {
-  background-color: rgba(52, 152, 219, 0.7);
-}
-
-.admin-btn.edit:hover {
-  background-color: rgba(52, 152, 219, 0.9);
-}
-
-/* Tabele */
-.admin-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 20px 0;
-}
-
-.admin-table th, 
-.admin-table td {
-  padding: 15px;
-  text-align: left;
-  border-bottom: 1px solid rgba(159, 82, 255, 0.2);
-}
-
-.admin-table th {
-  color: #9f52ff;
-  font-weight: 600;
-}
-
-.admin-table tr:hover {
-  background-color: rgba(159, 82, 255, 0.1);
-}
-
-/* Formularze */
-.admin-form {
-  background-color: rgba(255, 255, 255, 0.1);
-  padding: 25px;
-  border-radius: 15px;
-  margin-bottom: 30px;
-}
-
-.admin-form-group {
-  margin-bottom: 20px;
-}
-
-.admin-form-group label {
+.star::before {
+  content: "";
   display: block;
-  margin-bottom: 8px;
-  color: #c2c2c2;
-  font-size: 0.9rem;
+  width: 2px;
+  height: 2px;
+  background-color: #fff;
+  border-radius: 50%;
 }
 
-.admin-form-group input[type="text"],
-.admin-form-group textarea {
-  width: 100%;
-  padding: 12px;
-  background-color: rgba(255, 255, 255, 0.2);
-  border: none;
-  border-radius: 10px;
-  color: #fff;
-  font-family: "Roboto Mono", monospace;
+@keyframes twinkle {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0; 
+  }
 }
 
-.admin-form-group textarea {
-  min-height: 120px;
-  resize: vertical;
+@keyframes fall {
+  0% {
+    transform: translateY(-10%); 
+  }
+  100% {
+    transform: translateY(110%);
+  }
 }
 
-/* Komunikaty */
-.admin-alert {
-  padding: 15px;
-  margin-bottom: 20px;
-  border-radius: 8px;
-  font-weight: 500;
+#watermark {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  font-size: 14px;
+  color: #ffffff;
+  opacity: 0.5; 
+  z-index: 10; 
 }
 
-.admin-alert.success {
-  background: rgba(46, 204, 113, 0.2);
-  color: #2ecc71;
-  border: 1px solid rgba(46, 204, 113, 0.3);
+#datetime {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  font-size: 14px;
+  color: #5e5b5b;
+  z-index: 10;
+  font-family: "Roboto Mono", monospace; 
 }
 
-.admin-alert.error {
-  background: rgba(231, 76, 60, 0.2);
-  color: #e74c3c;
-  border: 1px solid rgba(231, 76, 60, 0.3);
-}
-
-/* Statystyki */
-.admin-stats {
+/* Elementy specyficzne dla panelu admina */
+.stats {
   display: flex;
+  justify-content: center;
   gap: 20px;
   margin-bottom: 30px;
 }
 
-.admin-stat-card {
-  flex: 1;
+.stat-card {
   background: rgba(0, 0, 0, 0.4);
   padding: 20px;
   border-radius: 10px;
-  text-align: center;
+  flex: 1;
+  max-width: 200px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
-.admin-stat-card h3 {
+.stat-card h3 {
   margin: 0 0 10px 0;
   color: #c2c2c2;
   font-size: 1rem;
 }
 
-.admin-stat-card p {
+.stat-card p {
   margin: 0;
   font-size: 2rem;
   color: #9f52ff;
   font-weight: 700;
 }
 
+.user-list {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.user-list table {
+  width: 100%;
+  border-collapse: collapse;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.user-list th, 
+.user-list td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid rgba(159, 82, 255, 0.2);
+}
+
+.user-list th {
+  background: rgba(159, 82, 255, 0.2);
+  color: #fff;
+  font-weight: 600;
+}
+
+.user-list tr:hover {
+  background: rgba(159, 82, 255, 0.1);
+}
+
+.badge {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.badge.admin {
+  background: rgba(159, 82, 255, 0.3);
+  color: #9f52ff;
+}
+
+.badge.user {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.log {
+  background-color: #9f52ff;
+  color: #fff;
+  border: none;
+  padding: 8px 15px;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.log:hover {
+  background-color: #805ad5;
+  transform: scale(1.05);
+}
+
+.log.delete {
+  background-color: rgba(231, 76, 60, 0.7);
+}
+
+.log.delete:hover {
+  background-color: rgba(231, 76, 60, 0.9);
+}
+
+.log.edit {
+  background-color: rgba(52, 152, 219, 0.7);
+}
+
+.log.edit:hover {
+  background-color: rgba(52, 152, 219, 0.9);
+}
+
+.alert {
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.alert.success {
+  background: rgba(46, 204, 113, 0.2);
+  color: #2ecc71;
+  border: 1px solid rgba(46, 204, 113, 0.3);
+}
+
+.alert.error {
+  background: rgba(231, 76, 60, 0.2);
+  color: #e74c3c;
+  border: 1px solid rgba(231, 76, 60, 0.3);
+}
+
 /* Responsywność */
 @media (max-width: 768px) {
-  .admin-main-box {
+  #main-box {
     width: 95%;
     height: 90vh;
-    padding: 15px;
+    padding: 20px;
   }
   
-  .admin-table th, 
-  .admin-table td {
-    padding: 10px;
-    font-size: 0.9rem;
-  }
-  
-  .admin-stats {
+  .stats {
     flex-direction: column;
-    gap: 10px;
+    align-items: center;
   }
   
-  .admin-btn {
-    padding: 8px 15px;
-    font-size: 14px;
+  .stat-card {
+    max-width: 100%;
+    width: 100%;
+  }
+  
+  .actions {
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .log {
+    width: 100%;
+    justify-content: center;
   }
 }
 
 @media (max-width: 480px) {
-  .admin-main-box {
+  #main-box {
     width: 100%;
     height: 95vh;
+    padding: 15px;
+  }
+  
+  .profile-nick {
+    font-size: 2rem;
+  }
+  
+  .user-list th, 
+  .user-list td {
     padding: 10px;
+    font-size: 0.9rem;
   }
   
-  .admin-table {
-    display: block;
-    overflow-x: auto;
-  }
-  
-  .admin-header h1 {
-    font-size: 1.5rem;
-  }
-  
-  .admin-stat-card p {
-    font-size: 1.5rem;
+  .badge {
+    font-size: 0.7rem;
+    padding: 3px 8px;
   }
 }

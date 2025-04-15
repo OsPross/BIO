@@ -26,6 +26,11 @@ $user_data = getUserData($_SESSION['user_id']);
   
   <div id="background"></div>
   <div id="datetime"></div>
+  
+  <form method="GET" action="search_results.php" class="search-bar-right">
+  <input type="text" name="query" placeholder="Szukaj użytkownika..." required>
+  </form>
+
   <?php if ($_SESSION['is_admin'] ?? false): ?>
     <button class="pan"><a href="admin_panel.php">Panel Admina</a></button>
 <?php endif; ?>
